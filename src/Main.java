@@ -1,36 +1,21 @@
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(System.in);
-        String[] a = scanner.next().split(":");
-        String[] b = scanner.next().split(":");
-
-        int aHour = Integer.parseInt(a[0]);
-        int aMinute = Integer.parseInt(a[1]);
-        int aSecond = Integer.parseInt(a[2]);
-        int aSecondAmount = aHour * 3600 + aMinute * 60 + aSecond;
-
-        int bHour = Integer.parseInt(b[0]);
-        int bMinute = Integer.parseInt(b[1]);
-        int bSecond = Integer.parseInt(b[2]);
-        int bSecondAmount
-                = bHour * 3600 + bMinute * 60 + bSecond;
-
-        int needSecondAmount = bSecondAmount - aSecondAmount;
-        if(needSecondAmount <= 0){
-            needSecondAmount += 24 * 3600;
+    public String solution(String str, int n){
+        String answer = "";
+        for (int i = 0; i < n; i++) {
+            String tmp = str.substring(0, 7).replace('#', '1').replace('*', '0');
+            int t = Integer.parseInt(tmp, 2);
+            answer += (char) t;
+            str = str.substring(7);
         }
-
-        int needHour = needSecondAmount / 3600;
-        int needMinute = (needSecondAmount % 3600) / 60;
-        int needSecoed = needSecondAmount % 60;
-
-        System.out.printf("%02d:%02d:%02d", needHour, needMinute, needSecoed);
-
-
+        return answer;
+    }
+    public static void main(String[] args) {
+        Main T = new Main();
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        String str = scanner.next();
+        System.out.print(T.solution(str, n));
     }
 }
