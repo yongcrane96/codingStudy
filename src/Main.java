@@ -1,37 +1,32 @@
 import java.io.*;
-import java.util.*;
 
 class Main {
-    public int solution(int n, int m, int[][] arr){
-        int answer = 0;
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <=n; j++) {
-                int cnt =0;
-                for (int k = 0; k < m; k++) { // 테스트 번호
-                    int pi = 0, pj=0;
-                    for (int l = 0; l < n; l++) {
-                        if(arr[k][l] == i) pi =l;
-                        if(arr[k][l] == j) pj =l;
-                    }
-                    if(pi<pj) cnt++;
-                }
-                if(cnt == m) answer++;
+    static int answer;
+    static boolean[] visit;
+    static int[][] dungeon;
+    public int solution(int n, int[][] arr){
+        answer =0;
+        dungeon = arr;
+        visit = new boolean[dungeon.length];
+       back(n, 0);
+        return  answer;
+    }
+
+    private static void back(int n, int count){
+        for (int i = 0; i < dungeon.length; i++) {
+            if(!visit[i] && dungeon[i][0] <= n){
+                visit[i] =true;
+                back(n- dungeon[i][1], count + 1);
+                answer = Math.max(answer, count+1);
+                visit[i] = false;
             }
         }
-        return answer;
     }
 
     public static void main(String[] args) throws IOException {
         Main T = new Main();
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-        int[][] arr = new int[m][n];
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                arr[i][j] = sc.nextInt();
-            }
-        }
-            System.out.print(T.solution(n,m, arr));
+        int n = 80;
+        int[][] arr = {{80,20},{50,40},{30,10}};
+        System.out.print(T.solution(n,arr));
     }
 }
