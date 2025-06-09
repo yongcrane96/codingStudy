@@ -1,72 +1,33 @@
-import java.io.*;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.util.*;
 
 class Main {
-    public static int findMaxRow(char[][] map){
-        int N = map.length;
-        int maxRow = 0;
-        for (int i = 0; i < N; i++) {
-            int len = 1;
-            for (int j = 1; j < N; j++) {
-                if(map[i][j] == map[i][j-1]) len++;
-                else{
-                    maxRow = Math.max(maxRow, len);
-                    len = 1;
+        public static int[][] solution(int[][] matrix, int r) {
+            int n = matrix.length;
+            int rotations = r % 4;
+
+            for (int i = 0; i < rotations; i++) {
+                rotateOnce(matrix);
+            }
+
+            return matrix;
+        }
+
+        private static void rotateOnce(int[][] matrix) {
+            int n = matrix.length;
+            for (int i = 0; i < n / 2; i++) {
+                for (int j = i; j < n - 1 - i; j++) {
+                    int temp = matrix[i][j];
+                    matrix[i][j] = matrix[n - 1 - j][i];
+                    matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 - j];
+                    matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i];
+                    matrix[j][n - 1 - i] = temp;
                 }
             }
-            maxRow = Math.max(maxRow, len);
         }
-        return maxRow;
-    }
-    public static int findMaxColumn(char[][] map){
-        int N = map.length;
-        int maxColumn = 0;
-        for (int i = 0; i < N; i++) {
-            int len = 1;
-            for (int j = 1; j < N; j++) {
-                if(map[j][i] == map[j-1][i]) len++;
-                else{
-                    maxColumn = Math.max(maxColumn, len);
-                    len = 1;
-                }
-            }
-            maxColumn = Math.max(maxColumn, len);
-        }
-        return maxColumn;
-    }
-    public static void swapCandy(char[][] map, int r1, int c1, int r2, int c2){
-        char temp = map[r1][c1];
-        map[r1][c1] = map[r2][c2];
-        map[r2][c2] = temp;
-    }
 
     public static void main(String[] args) {
-        // 1. 가능한 모든 쌍의 사탕을 서로 교환한다.
-        // 2. 교환한 상태에서 가장 긴 연속 부분 행/열을 찾는다.
-        // 3. 교환한 사탕을 원복한다.
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        char[][] map =new char[N][N];
-        for (int i = 0; i < N; i++)
-            map[i] = sc.next().toCharArray();
-
-        int ans = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if(j+1 < N && map[i][j] != map[i][j + 1]){
-                    swapCandy(map, i, j, i, j+1);
-                    ans = Math.max(ans, Math.max(findMaxColumn(map), findMaxRow(map)));
-                    swapCandy(map, i, j, i, j+1);
-                }
-                if(i+1 < N && map[i][j] != map[i+1][j]){
-                    swapCandy(map, i, j, i+1, j);
-                    ans = Math.max(ans, Math.max(findMaxColumn(map), findMaxRow(map)));
-                    swapCandy(map, i, j, i+1, j);
-                }
-            }
-        }
-        System.out.println(ans);
+        int[][] matrix = {{1,2},{3,4}};
+        int r = 1;
+        System.out.println(Arrays.deepToString(solution(matrix,r)));
     }
 }
